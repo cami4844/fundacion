@@ -1,0 +1,287 @@
+/* ============================================================
+   components.css: cabecera, menú, botones, modal, luzbox,
+   cookies, pie y flotantes. Cristal solo donde aporta.
+   ============================================================ */
+
+/* ---------- Cabecera (cristal estratégico) ---------- */
+.cabecera {
+  position: fixed; inset-inline: 0; top: 0; z-index: 100;
+  background: var(--cristal);
+  border-bottom: 1px solid var(--linea);
+  transition: background 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+/* El desenfoque vive en un pseudo-elemento: un backdrop-filter directo
+   en la cabecera la convertiría en bloque contenedor del menú móvil
+   (position: fixed) y lo aplastaría dentro de los 64 px de la barra. */
+.cabecera::before {
+  content: "";
+  position: absolute; inset: 0;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  z-index: -1;
+  pointer-events: none;
+}
+.cabecera-int {
+  width: min(1280px, 100% - clamp(2rem, 6vw, 4rem));
+  margin-inline: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: 74px;
+}
+.cabecera.elevada { box-shadow: 0 8px 30px rgba(4, 10, 18, 0.25); }
+.marca { display: flex; align-items: center; border-radius: 8px; }
+.marca-logo { height: 52px; width: auto; transition: transform 0.35s var(--ease); }
+/* Hover sutil sobre el enlace: el archivo del logo no se toca nunca */
+.marca { transition: opacity 0.3s var(--ease); }
+.marca:hover { opacity: 0.9; }
+.marca:hover .marca-logo { transform: scale(1.015) translateY(-1px); }
+.nav { display: flex; align-items: center; }
+.menu { display: flex; align-items: center; gap: clamp(0.9rem, 2vw, 1.6rem); }
+.menu ul { display: flex; align-items: center; gap: clamp(0.9rem, 2vw, 1.6rem); }
+.menu a:not(.btn) {
+  text-decoration: none; font-size: var(--fs-chico); font-weight: 500;
+  color: var(--tinta-2);
+  padding: 0.35rem 0.1rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.menu a:not(.btn):hover { color: var(--tinta); }
+.menu a.activo { color: var(--teal-claro); border-bottom-color: var(--teal-claro); }
+
+.nav-abre {
+  display: none;
+  flex-direction: column; gap: 5px;
+  background: none; border: 0; padding: 0.6rem 0.4rem;
+}
+.nav-abre span { width: 22px; height: 2px; background: var(--tinta); border-radius: 2px; transition: transform 0.35s var(--ease), opacity 0.3s; }
+.nav-abre[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-abre[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-abre[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  font-weight: 600; font-size: var(--fs-chico);
+  text-decoration: none; border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.7rem 1.5rem;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease),
+              background 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+  will-change: transform;
+}
+@media (max-width: 640px) {
+  /* Móvil: cada capa compuesta cuesta memoria — la elevación ya la da :active */
+  .btn { will-change: auto; }
+}
+.btn .icono { width: 1.05rem; height: 1.05rem; flex: 0 0 auto; transition: transform 0.3s var(--ease); }
+.btn:hover { transform: translateY(-2px); }
+.btn:hover .icono { transform: translateX(2px); }
+.btn:active { transform: translateY(1px) scale(0.98); transition-duration: 0.1s; }
+
+.btn-primario { background: var(--azul); color: #fff; }
+.btn-primario:hover { background: #0F5C99; border-color: #0F5C99; box-shadow: 0 8px 22px rgba(21, 112, 184, 0.35); }
+
+.btn-whatsapp { background: var(--teal); color: #fff; }
+.btn-whatsapp:hover { background: #027F7D; border-color: #027F7D; box-shadow: 0 8px 22px rgba(2, 156, 154, 0.35); }
+.btn-whatsapp:hover .icono { transform: scale(1.1) rotate(6deg); }
+
+.btn-borde { background: transparent; border-color: var(--linea); color: inherit; }
+.btn-borde:hover { border-color: var(--teal-claro); color: var(--teal-claro); background: rgba(62, 193, 190, 0.06); }
+.btn-chico { padding: 0.5rem 1.1rem; font-size: 0.82rem; }
+
+/* ---------- Pie ---------- */
+.pie { background: rgba(8, 16, 25, 0.94); color: var(--tinta); border-top: 1px solid var(--linea); }
+.pie-rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding: var(--sp-5) 0 var(--sp-4);
+}
+.pie-marca img { width: min(240px, 70vw); height: auto; margin-bottom: var(--sp-2); }
+.pie-lema { font-family: var(--f-acento); font-style: italic; color: var(--tinta-2); max-width: 34ch; }
+.pie-lugar { color: var(--tinta-2); margin-top: var(--sp-1); }
+.pie .etiqueta { color: var(--teal-claro); }
+.pie-nav ul { display: grid; gap: 0.45rem; }
+.pie-nav a { text-decoration: none; color: var(--tinta-2); font-size: var(--fs-chico); transition: color 0.3s var(--ease); }
+.pie-nav a:hover { color: var(--tinta); }
+.pie-contacto { display: flex; flex-direction: column; gap: 0.55rem; align-items: flex-start; }
+.pie-wa {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  color: var(--tinta); text-decoration: none; font-weight: 600; font-size: var(--fs-chico);
+  transition: color 0.3s var(--ease);
+}
+.pie-wa .icono { width: 1.05rem; height: 1.05rem; color: var(--teal-claro); }
+.pie-wa:hover { color: var(--teal-claro); }
+.pie-reloj { color: var(--tinta-2); letter-spacing: 0.08em; }
+.enlace-sencillo {
+  background: none; border: 0; padding: 0;
+  color: var(--tinta-2); font-size: var(--fs-chico); text-decoration: underline;
+  transition: color 0.3s var(--ease);
+}
+.enlace-sencillo:hover { color: var(--teal-claro); }
+.pie-legal { border-top: 1px solid var(--linea); padding: var(--sp-2) 0 var(--sp-3); }
+.pie-legal p { margin: 0; color: var(--tinta-2); font-size: 0.72rem; }
+
+/* ---------- Flotantes ---------- */
+.flotante-wa, .flotante-arriba {
+  position: fixed; z-index: 90;
+  width: 3.2rem; height: 3.2rem;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  border: 0;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), opacity 0.3s;
+}
+.flotante-wa {
+  right: calc(clamp(1rem, 3vw, 1.8rem) + env(safe-area-inset-right, 0px));
+  bottom: calc(clamp(1rem, 3vw, 1.8rem) + env(safe-area-inset-bottom, 0px));
+  background: var(--teal); color: #fff;
+  box-shadow: 0 10px 26px rgba(2, 156, 154, 0.4);
+}
+.flotante-wa .icono { width: 1.5rem; height: 1.5rem; }
+.flotante-wa:hover { transform: translateY(-3px) scale(1.04); }
+/* Reacción discreta del icono al pasar el mouse */
+.flotante-wa .icono { transition: transform 0.3s var(--ease); }
+.flotante-wa:hover .icono { transform: scale(1.1) rotate(8deg); }
+/* Anillo de pulso muy lento: señala el canal vivo sin exigir atención */
+.flotante-wa::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(2, 156, 154, 0.4);
+  animation: pulso-wa 3.4s var(--ease) infinite;
+  pointer-events: none;
+}
+@keyframes pulso-wa {
+  0% { box-shadow: 0 0 0 0 rgba(2, 156, 154, 0.38); }
+  55% { box-shadow: 0 0 0 13px rgba(2, 156, 154, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(2, 156, 154, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flotante-wa::after { animation: none; }
+}
+.flotante-arriba {
+  right: calc(clamp(1rem, 3vw, 1.8rem) + env(safe-area-inset-right, 0px));
+  bottom: calc(clamp(1rem, 3vw, 1.8rem) + env(safe-area-inset-bottom, 0px) + 4rem);
+  background: var(--noche-2); color: var(--tinta);
+  border: 1px solid var(--linea);
+  opacity: 0; pointer-events: none;
+}
+.flotante-arriba.visible { opacity: 1; pointer-events: auto; }
+.flotante-arriba[hidden] { display: none; }
+.flotante-arriba:hover { transform: translateY(-3px); }
+.flotante-arriba .icono { width: 1.1rem; height: 1.1rem; }
+
+/* ---------- Cookies ---------- */
+.cookies {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 110;
+  padding: var(--sp-2) clamp(1rem, 3vw, 2rem) calc(var(--sp-2) + env(safe-area-inset-bottom, 0px));
+  transform: translateY(110%);
+  transition: transform 0.5s var(--ease);
+}
+.cookies.visible { transform: none; }
+.cookies-int {
+  width: min(920px, 100%);
+  margin-inline: auto;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
+  background: rgba(16, 31, 51, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: var(--sp-2) var(--sp-3);
+  box-shadow: var(--sombra-fuerte);
+  color: var(--tinta);
+}
+.cookies-titulo { font-weight: 700; margin-bottom: 0.15rem; }
+.cookies-texto p { margin: 0; font-size: var(--fs-chico); color: var(--tinta-2); max-width: 56ch; }
+.cookies-acciones { display: flex; gap: var(--sp-1); flex: 0 0 auto; }
+
+/* Móvil: el aviso debe ser una píldora discreta, no una pared.
+   Sin blur (coste GPU en gama media) y con texto compacto. */
+@media (max-width: 640px) {
+  .cookies { padding: 0.55rem 0.7rem calc(0.55rem + env(safe-area-inset-bottom, 0px)); }
+  .cookies-int {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(13, 25, 42, 0.97);
+    padding: 0.7rem 0.85rem;
+    gap: 0.55rem;
+  }
+  .cookies-titulo { font-size: 0.85rem; margin-bottom: 0.1rem; }
+  .cookies-texto p { font-size: 0.74rem; line-height: 1.45; }
+  .cookies-acciones { gap: 0.4rem; }
+  .cookies .btn-chico { padding: 0.45rem 0.95rem; font-size: 0.76rem; }
+}
+
+/* Móvil: desenfoques fuera de la cabecera y del cajón.
+   El backdrop-filter repinta cada frame durante el scroll y es el
+   mayor generador de tirones en gama media: fondo más sólido, cero blur. */
+@media (max-width: 640px) {
+  .cabecera::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .cabecera { background: rgba(9, 18, 31, 0.94); }
+  .menu {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(9, 18, 31, 0.985);
+  }
+}
+
+/* ---------- Modal ficha ---------- */
+.modal { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: var(--sp-3); }
+.modal-fondo { position: absolute; inset: 0; background: rgba(4, 10, 18, 0.62); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.modal-caja {
+  position: relative;
+  width: min(560px, 100%);
+  background: var(--papel-2); color: var(--tinta-clara);
+  border-radius: var(--radio);
+  padding: var(--sp-4);
+  box-shadow: var(--sombra-fuerte);
+  animation: modal-entra 0.35s var(--ease);
+}
+@keyframes modal-entra { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+.modal-cierra {
+  position: absolute; top: 0.9rem; right: 0.9rem;
+  width: 2.2rem; height: 2.2rem;
+  display: grid; place-items: center;
+  background: none; border: 1px solid var(--linea-clara); border-radius: 50%;
+  color: var(--tinta-clara-2);
+  transition: all 0.3s var(--ease);
+}
+.modal-cierra:hover { border-color: var(--azul); color: var(--azul); }
+.modal-caja .etiqueta { color: var(--azul); }
+.modal-caja h3 { margin-top: 0.2rem; }
+.modal-caja p:not(.etiqueta) { color: var(--tinta-clara-2); margin: 0; }
+.modal[hidden], .luzbox[hidden], .cookies[hidden] { display: none; }
+
+/* ---------- Luzbox ---------- */
+.luzbox {
+  position: fixed; inset: 0; z-index: 130;
+  display: grid; place-items: center;
+  background: rgba(4, 10, 18, 0.9);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: luz-entra 0.3s var(--ease);
+}
+@keyframes luz-entra { from { opacity: 0; } to { opacity: 1; } }
+.luzbox-figura { margin: 0; max-width: min(880px, 100%); }
+.luzbox-figura img { max-height: 74vh; width: auto; max-width: 100%; border-radius: var(--radio-chico); margin-inline: auto; }
+.luzbox-figura figcaption { text-align: center; color: var(--tinta-2); margin-top: var(--sp-2); }
+.luzbox-cierra, .luzbox-flecha {
+  position: absolute;
+  width: 2.6rem; height: 2.6rem;
+  display: grid; place-items: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--linea); border-radius: 50%;
+  color: var(--tinta);
+  transition: all 0.3s var(--ease);
+}
+.luzbox-cierra:hover, .luzbox-flecha:hover { background: rgba(255, 255, 255, 0.16); }
+.luzbox-cierra { top: clamp(1rem, 3vw, 1.6rem); right: clamp(1rem, 3vw, 1.6rem); }
+.luzbox-prev { left: clamp(0.6rem, 2vw, 1.4rem); top: 50%; transform: translateY(-50%); }
+.luzbox-next { right: clamp(0.6rem, 2vw, 1.4rem); top: 50%; transform: translateY(-50%); }
+.luzbox .icono { width: 1.2rem; height: 1.2rem; }
+
+/* Icono genérico */
+.icono { fill: currentColor; }

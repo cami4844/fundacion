@@ -1,0 +1,6 @@
+# Permitir la indexación de todo el sitio
+User-agent: *
+Allow:
+
+# Sitemap: reemplaza la URL por tu dominio real al publicar
+# Sitemap: https://TU-DOMINIO/sitemap.xml

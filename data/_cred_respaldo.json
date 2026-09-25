@@ -1,0 +1,4 @@
+{
+  "nota": "Aquí vive SOLO el hash cifrado de la clave del panel. Cambia la clave desde el panel (pestaña Seguridad).",
+  "hash": "scrypt$0e36b66a7ec333ab0700708451bfff09$efcaa470f783d17a4439cc1ebd8a979542a5a70cc2b5a4d0571c1ea8c3ea000d1677ca97dfd2e8bceed72a7d3f19d24d1d23c31537ccce3872b7fd29b3a6ff7b"
+}

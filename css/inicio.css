@@ -1,0 +1,288 @@
+﻿/* ============================================================
+   INICIO V15 Â«Taller de cienciaÂ» â€” solo la pÃ¡gina principal:
+   portada, ventana del taller de Redito, consola Â«Poner en
+   marchaÂ», cinta de momentos y tarjetas Â«ir aâ€¦Â».
+   Las posiciones de reposo del robot (mÃ¡rgenes) NO se tocan:
+   js/robot.js las lee para su fÃ­sica.
+   ============================================================ */
+
+/* â€”â€”â€”â€”â€” 1. Portada â€”â€”â€”â€”â€” */
+.portada{position:relative;padding-block:calc(var(--h-cabecera) + clamp(30px,5vw,64px)) 0;
+  border-bottom:var(--borde);background:
+  radial-gradient(46rem 30rem at 88% 8%,var(--verde-suave),transparent 62%),
+  radial-gradient(34rem 26rem at 4% 92%,var(--sol-suave),transparent 60%)}
+.portada__grid{display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(26px,4vw,54px);
+  align-items:center;padding-bottom:clamp(34px,5vw,60px)}
+.micro{display:inline-flex;align-items:center;gap:10px;font-family:var(--ff-mono);
+  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--tinta-2);
+  margin-bottom:20px}
+.micro i{width:34px;height:2px;background:var(--rojo)}
+.portada__titulo{font-size:clamp(2.45rem,5.6vw,4.3rem);margin:0 0 20px}
+.portada__titulo .linea-h{display:block}
+.portada__titulo .w{display:inline-block;opacity:0;transform:translateY(26px);
+  animation:entra-palabra .8s var(--ease) forwards;animation-delay:calc(.08s + var(--i,0)*.08s)}
+@keyframes entra-palabra{to{opacity:1;transform:none}}
+.portada__lede{font-size:clamp(1.04rem,1.5vw,1.2rem);color:var(--tinta-2);max-width:40ch;margin-bottom:24px}
+.portada__acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.portada__acciones .btn{opacity:0;transform:translateY(14px);
+  animation:entra-palabra .7s var(--ease) .6s forwards}
+.portada__acciones .btn:nth-child(2){animation-delay:.7s}
+
+/* enchufes: los cuatro componentes como tomas de corriente */
+.enchufes{list-style:none;margin:34px 0 0;padding:18px 0 0;border-top:2px dashed var(--linea);
+  display:flex;flex-wrap:wrap;gap:10px}
+.enchufes li{display:inline-flex;align-items:center;gap:9px;font-family:var(--ff-mono);
+  font-size:.7rem;letter-spacing:.06em;background:var(--blanco);border:2px solid var(--tinta);
+  border-radius:999px;padding:.5em 1.05em;box-shadow:var(--sombra-1);transition:transform .2s}
+.enchufes li b{font-weight:400;color:var(--tinta-3)}
+.enchufes li i{width:10px;height:10px;border-radius:50%;background:var(--hueso);
+  border:2px solid var(--tinta);transition:background .2s}
+.enchufes li:hover{transform:translateY(-2px)}
+
+/* estado EN MARCHA (lo dispara js/taller.js) */
+.en-marcha .enchufes li i{background:var(--verde-vivo);animation:enciende .4s var(--ease) both}
+.en-marcha .enchufes li:nth-child(1) i{animation-delay:.15s}
+.en-marcha .enchufes li:nth-child(2) i{animation-delay:.45s}
+.en-marcha .enchufes li:nth-child(3) i{animation-delay:.75s}
+.en-marcha .enchufes li:nth-child(4) i{animation-delay:1.05s}
+@keyframes enciende{0%{background:var(--hueso);box-shadow:none}
+  60%{background:var(--sol);box-shadow:0 0 0 4px rgba(240,180,41,.35)}
+  100%{background:var(--verde-vivo)}}
+.en-marcha .enchufes li{background:var(--verde-suave)}
+
+/* â€”â€”â€”â€”â€” 2. Ventana del taller (escenario de Redito) â€”â€”â€”â€”â€” */
+.portada__escena{position:relative;display:grid;place-items:center}
+.ventana{position:relative;width:min(480px,100%);background:var(--blanco);
+  border:var(--borde);border-radius:24px;box-shadow:var(--sombra);
+  min-height:520px;display:grid;place-items:center;padding:10px 10px 0;
+  transition:box-shadow .4s}
+.ventana::before,.ventana::after{content:"";position:absolute;width:11px;height:11px;
+  border-radius:50%;background:var(--tinta);opacity:.85}
+.ventana::before{top:14px;left:14px;box-shadow:434px 0 0 var(--tinta)}
+.ventana::after{bottom:14px;left:14px;box-shadow:434px 0 0 var(--tinta)}
+.ventana .washi{top:-13px;left:50%;transform:translateX(-50%) rotate(-3deg)}
+.en-marcha .ventana{box-shadow:8px 9px 0 var(--verde)}
+.portada__robot{position:relative;width:100%;max-width:470px;min-height:470px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.portada__robot:focus-visible{outline:3px solid var(--verde);outline-offset:8px;border-radius:50%}
+
+/* consola de marcha (momento firma) */
+.consola{position:absolute;left:14px;right:14px;bottom:-24px;z-index:6;
+  display:flex;align-items:center;gap:12px;background:var(--noche);color:#EDEBE3;
+  border:var(--borde);border-radius:16px;box-shadow:var(--sombra-1);padding:10px 14px}
+.consola__dial{width:44px;height:44px;flex:none;transform:rotate(-40deg);transition:transform .6s var(--ease)}
+.en-marcha .consola__dial{transform:rotate(120deg)}
+.consola__leds{display:flex;gap:7px;margin-left:auto}
+.consola__leds i{width:10px;height:10px;border-radius:50%;background:#3A3F45;
+  border:1.5px solid #000;transition:background .2s}
+.en-marcha .consola__leds i{background:var(--verde-vivo)}
+.en-marcha .consola__leds i:nth-child(2){transition-delay:.3s}
+.en-marcha .consola__leds i:nth-child(3){transition-delay:.6s}
+.en-marcha .consola__leds i:nth-child(4){transition-delay:.9s}
+.consola .btn{font-size:.78rem;padding:.6em 1em;box-shadow:2px 3px 0 var(--sol)}
+.consola .btn:active{transform:translate(2px,2px)}
+
+/* â€”â€”â€”â€”â€” 3. REDITO â€” fija: fÃ­sica en js/robot.js â€”â€”â€”â€”â€” */
+.rb-escena{--rb-s:1;position:absolute;left:50%;top:47%;width:0;height:0;
+  transform:translate(-50%,-50%) scale(var(--rb-s))}
+.rb-pieza{position:absolute;left:0;top:0;will-change:transform;pointer-events:none;z-index:2}
+.rb-pieza svg{display:block;overflow:visible}
+.rb-defs{position:absolute;width:0;height:0;overflow:hidden}
+.rb-pista{position:absolute;left:50%;top:2%;transform:translateX(-50%);font-family:var(--ff-mono);
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--verde);white-space:nowrap;
+  transition:opacity .3s;z-index:4}
+.rb-pista::after{content:"";position:absolute;left:50%;top:calc(100% + 6px);width:2px;height:16px;
+  background:var(--verde);transform:translateX(-50%)}
+.portada__robot.ocupado .rb-pista{opacity:0}
+.portada__robot.conocido .rb-pista{opacity:0;pointer-events:none}
+
+.rb-antena{margin:-136px 0 0 -24px;width:48px}
+.rb-cabeza{margin:-118px 0 0 -84px;width:168px;filter:drop-shadow(0 14px 14px rgba(17,20,23,.18))}
+.rb-oreja--i{margin:-72px 0 0 -101px;width:20px}
+.rb-oreja--d{margin:-72px 0 0 81px;width:20px}
+.rb-ojo{margin:-92px 0 0 -38px;width:40px}
+#rb-ojo-d{margin-left:-2px}
+.rb-boca{margin:-54px 0 0 -26px;width:52px}
+.rb-cuerpo{margin:-2px 0 0 -79px;width:158px;filter:drop-shadow(0 14px 14px rgba(17,20,23,.16))}
+.rb-pecho{margin:12px 0 0 -48px;width:96px}
+.rb-brazo--i{margin:-4px 0 0 -111px;width:32px;transform-origin:70% 18%}
+.rb-brazo--d{margin:-4px 0 0 80px;width:32px;transform-origin:30% 18%}
+.rb-base{margin:100px 0 0 -90px;width:180px}
+.rb-orbe{margin:-100px 0 0 86px;width:14px;height:14px}
+.rb-orbe--b{margin:44px 0 0 -112px;width:12px;height:12px}
+.rb-orbe--c{margin:106px 0 0 80px;width:10px;height:10px}
+.rb-orbe i{display:block;width:11px;height:11px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#DFF6F3,#1FA7A9 52%,#0E6F7A);
+  box-shadow:0 0 12px rgba(31,167,169,.75)}
+.rb-orbe--b i{width:9px;height:9px;background:radial-gradient(circle at 35% 30%,#F0A894,#C0402A 55%,#8C2A1A);
+  box-shadow:0 0 12px rgba(192,64,42,.6)}
+.rb-orbe--c i{width:8px;height:8px;background:radial-gradient(circle at 35% 30%,#FFF6DC,#F0B429 60%,#B9820F);
+  box-shadow:0 0 10px rgba(240,180,41,.65)}
+
+/* la pupila se desliza con el cursor (--px/--py) y se dilata un poco
+   cuando el cursor estÃ¡ cerca (--pe). transform-box:fill-box hace que
+   la escala gire sobre el centro de la propia pupila. */
+.rb-pupila{transform:translate(var(--px,0px),var(--py,0px)) scale(var(--pe,1));
+  transform-box:fill-box;transform-origin:center;will-change:transform}
+#rb-ojo-i svg,#rb-ojo-d svg{animation:rb-parpadeo 5.2s infinite;transform-origin:center}
+#rb-ojo-d svg{animation-delay:.06s}
+@keyframes rb-parpadeo{0%,93.6%,100%{transform:scaleY(0)}95.4%,98%{transform:scaleY(1)}}
+.rb-escena.rb-dormido #rb-ojo-i svg,.rb-escena.rb-dormido #rb-ojo-d svg{animation:none;transform:scaleY(.1)}
+.rb-luz{animation:rb-luz 2.4s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes rb-luz{50%{opacity:.5;transform:scale(.86)}}
+.rb-corazon{transform-origin:center;transform-box:fill-box;animation:rb-corazon 1.8s ease-in-out infinite}
+@keyframes rb-corazon{10%{transform:scale(1.18)}25%{transform:scale(1)}40%{transform:scale(1.12)}}
+.rb-onda{transform-box:fill-box;transform-origin:center;animation:rb-onda 2.8s ease-out infinite}
+@keyframes rb-onda{0%{transform:scale(.5);opacity:.75}75%,100%{transform:scale(1.3);opacity:0}}
+#rb-brazo-d svg{animation:rb-saluda 5.6s ease-in-out infinite;transform-origin:50% 12%}
+@keyframes rb-saluda{0%,55%,100%{transform:rotate(0)}64%,86%{transform:rotate(-34deg)}70%,80%{transform:rotate(-14deg)}}
+.antena-dibuja .rb-tallo{stroke-dasharray:60;stroke-dashoffset:60;animation:antena-dibuja 1.1s var(--ease) .35s forwards}
+@keyframes antena-dibuja{to{stroke-dashoffset:0}}
+
+.rb-escena.rb-feliz .rb-meji{opacity:1;transform:scale(1.3)}
+.rb-escena.rb-sorpresa .rb-meji{opacity:0}
+.rb-escena.en-casa{animation:rb-flota 4.6s ease-in-out infinite}
+@keyframes rb-flota{
+  0%,100%{transform:translate(-50%,-50%) scale(var(--rb-s))}
+  50%{transform:translate(-50%,calc(-50% - 9px)) scale(var(--rb-s))}}
+.rb-escena.feliz{animation:rb-salto .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes rb-salto{
+  30%{transform:translate(-50%,calc(-50% - 16px)) scale(calc(var(--rb-s)*1.06),calc(var(--rb-s)*.94))}
+  60%{transform:translate(-50%,-50%) scale(calc(var(--rb-s)*.96),calc(var(--rb-s)*1.05))}}
+
+.rb-halo{position:absolute;left:50%;top:47%;width:330px;height:330px;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;z-index:0;opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(circle,rgba(31,167,169,.16),rgba(31,167,169,.04) 48%,transparent 70%)}
+.portada__robot:hover .rb-halo,.portada__robot:focus-visible .rb-halo{opacity:1;
+  animation:halo-respira 3.4s ease-in-out infinite}
+@keyframes halo-respira{50%{transform:translate(-50%,-50%) scale(1.05)}}
+.rb-sombra{position:absolute;left:50%;top:47%;width:170px;height:26px;margin:112px 0 0 -85px;z-index:1;
+  pointer-events:none;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(17,20,23,.3) 0%,rgba(17,20,23,.14) 45%,transparent 72%);
+  animation:rb-respira-sombra 4.6s ease-in-out infinite}
+@keyframes rb-respira-sombra{50%{transform:scale(.88);opacity:.75}}
+.rb-meji{position:absolute;z-index:3;width:12px;height:7px;border-radius:50%;background:#D98C79;
+  opacity:.75;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+.rb-meji--i{margin:-46px 0 0 -66px}
+.rb-meji--d{margin:-46px 0 0 53px}
+.rb-burbuja{position:absolute;left:auto;right:0;top:3%;max-width:min(62%,250px);
+  background:var(--sol-suave);border:2px solid var(--tinta);border-radius:12px 12px 12px 3px;
+  padding:.5em .9em;font-weight:600;font-size:.85rem;text-align:center;
+  box-shadow:var(--sombra-1);opacity:0;transform:translateY(8px) scale(.92);transform-origin:right top;
+  transition:opacity .25s,transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;z-index:5}
+.rb-burbuja.visible{opacity:1;transform:none}
+.escena__nota{display:flex;align-items:center;gap:10px;white-space:nowrap;margin:6px 0 14px;
+  font-family:var(--ff-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-3)}
+.escena__nota b{color:var(--tinta);letter-spacing:.18em}
+.escena__nota span{padding-left:10px;border-left:2px solid var(--linea)}
+
+/* â€”â€”â€”â€”â€” 4. Cinta de momentos (polaroids en una tira) â€”â€”â€”â€”â€” */
+.momentos{padding-block:clamp(56px,8vw,104px)}
+.cinta{overflow:hidden;margin-top:10px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.cinta__pista{display:flex;width:max-content;animation:cinta-rueda 52s linear infinite}
+.cinta:hover .cinta__pista{animation-play-state:paused}
+@keyframes cinta-rueda{to{transform:translateX(-50%)}}
+.cinta__grupo{display:flex;gap:26px;padding:26px 13px 34px}
+.cinta figure{position:relative;width:216px;flex:none;margin:0;background:var(--blanco);
+  border:var(--borde);border-radius:14px;box-shadow:var(--sombra-1);padding:10px 10px 12px}
+.cinta figure:nth-child(odd){transform:rotate(-2.4deg)}
+.cinta figure:nth-child(even){transform:rotate(2.1deg)}
+.cinta figure .washi{width:74px;height:20px;top:-12px;left:50%;transform:translateX(-50%) rotate(-4deg)}
+.cinta figure:nth-child(even) .washi{transform:translateX(-50%) rotate(3deg)}
+.cinta img{width:100%;height:132px;object-fit:cover;border-radius:8px;border:1.5px solid var(--tinta)}
+.cinta figcaption{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--tinta-2);text-align:center;padding-top:9px}
+
+/* â€”â€”â€”â€”â€” 5. Tarjetas Â«ir aâ€¦Â» (el sitio tiene varias pÃ¡ginas) â€”â€”â€”â€”â€” */
+.ir{padding-block:clamp(56px,8vw,104px);background:var(--verde);border-top:var(--borde)}
+.ir__cab{display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px;justify-content:space-between;
+  color:#fff;margin-bottom:34px}
+.ir__cab .rotulo{color:var(--sol-suave)}
+.ir__cab h2{font-size:clamp(1.8rem,3.4vw,2.8rem);max-width:22ch}
+.ir__cab h2 .marca-agua{background:none;color:var(--sol)}
+.ir__cab p{max-width:44ch;color:rgba(255,255,255,.85)}
+.ir__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;scroll-margin-top:90px}
+/* Â«ExploraÂ» tiene que verse de lejos: el aviso grande centrado y el
+   rÃ³tulo con luz parpadeante lo Announcement sin necesidad de un menÃº. */
+.rotulo--seÃ±al{position:relative}
+.rotulo--seÃ±al i{animation:ir-senal 2.2s ease-in-out infinite}
+@keyframes ir-senal{0%,100%{box-shadow:0 0 0 0 rgba(240,180,41,.9)}
+  55%{box-shadow:0 0 0 9px rgba(240,180,41,0)}}
+.ir__aviso{display:flex;align-items:center;gap:16px;max-width:560px;margin:0 auto 34px;
+  background:var(--sol);color:var(--tinta);text-decoration:none;
+  border:var(--borde);border-radius:var(--radio);box-shadow:6px 7px 0 rgba(0,0,0,.3);
+  padding:16px 22px;transition:transform .2s var(--ease),box-shadow .2s}
+.ir__aviso:hover{transform:translate(-2px,-3px);box-shadow:9px 11px 0 rgba(0,0,0,.3)}
+.ir__aviso-brazo{width:46px;height:46px;flex:none;border-radius:50%;background:var(--tinta);
+  color:var(--sol);display:grid;place-items:center;animation:ir-brazo 1.7s ease-in-out infinite}
+@keyframes ir-brazo{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.ir__aviso-txt{display:flex;flex-direction:column;line-height:1.35}
+.ir__aviso-txt b{font-size:1.06rem}
+.ir__aviso-txt i{font-style:normal;font-family:var(--ff-mono);font-size:.62rem;
+  letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.ir__tarjeta{position:relative;display:flex;flex-direction:column;gap:8px;min-height:172px;
+  background:var(--blanco);color:var(--tinta);text-decoration:none;border:var(--borde);
+  border-radius:var(--radio);box-shadow:var(--sombra-1);padding:22px 22px 18px;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.ir__tarjeta:hover{transform:translate(-3px,-3px);box-shadow:var(--sombra-2)}
+.ir__tarjeta i{font-style:normal;font-family:var(--ff-mono);font-size:.64rem;letter-spacing:.2em;
+  color:var(--tinta-3)}
+.ir__tarjeta h3{font-size:1.3rem}
+.ir__tarjeta p{font-size:.85rem;color:var(--tinta-2)}
+.ir__tarjeta .ir__flecha{margin-top:auto;align-self:flex-end;width:38px;height:38px;border-radius:50%;
+  background:var(--sol);border:2px solid var(--tinta);display:grid;place-items:center;
+  transition:transform .2s}
+.ir__tarjeta:hover .ir__flecha{transform:translateX(5px)}
+.ir__extra{display:grid;place-items:center;text-align:center;
+  background:var(--sol);border:var(--borde);border-radius:var(--radio);box-shadow:var(--sombra-1);
+  padding:22px;transform:rotate(-1.6deg)}
+.ir__extra b{display:block;font-size:1.1rem;margin-top:8px}
+.ir__extra small{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase}
+
+/* â€”â€”â€”â€”â€” 6. Responsive inicio â€”â€”â€”â€”â€” */
+@media (max-width:1080px){
+  .portada__grid{grid-template-columns:1fr;gap:52px}
+  .portada__escena{order:2;margin-bottom:44px}
+  .ir__grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .portada__titulo{font-size:clamp(2.1rem,9vw,2.8rem)}
+  .portada__acciones{flex-direction:column;align-items:stretch}
+  .portada__acciones .btn{justify-content:center}
+  .ventana{min-height:440px}
+  .portada__robot{min-height:410px}
+  .consola{flex-wrap:wrap;bottom:-30px}
+  .consola .btn{order:-1;width:100%;justify-content:center}
+  .ir__grid{grid-template-columns:1fr}
+  .cinta figure{width:180px}
+}
+@media (max-width:520px){
+  .ventana{min-height:380px}
+  .portada__robot{min-height:350px;max-width:100%}
+  .rb-escena{top:48%;--rb-s:.8}
+  .escena__nota{white-space:normal;text-align:center;justify-content:center}
+}
+
+/* â€”â€”â€”â€”â€” 7. Movimiento reducido (solo lo propio de inicio) â€”â€”â€”â€”â€” */
+@media (prefers-reduced-motion:reduce){
+  .portada__titulo .w,.portada__acciones .btn{opacity:1;transform:none;animation:none}
+  .cinta__pista{animation:none;transform:none}
+  .rb-escena,.rb-escena.en-casa{animation:none;transform:translate(-50%,-50%) scale(var(--rb-s))}
+  .rb-luz,.rb-onda,.rb-corazon,#rb-brazo-d svg,.rb-sombra{animation:none}
+  .antena-dibuja .rb-tallo{stroke-dashoffset:0;animation:none}
+}
+
+/* â•â•â• INTRO â€” el logo abre solo la pÃ¡gina y al bajar se acopla a la esquina de la cabecera â•â•â•
+   El lema aparece de a poquito con el scroll (lo maneja main.js) y el logo viaja
+   hasta donde estÃ¡ el isotipo de la cabecera: mismo sitio, mismo tamaÃ±o, cambio
+   invisible. Sin JS o con movimiento reducido: logo quieto y lema visible. */
+.intro{position:relative;min-height:100svh;display:grid;place-items:center;padding:calc(var(--h-cabecera) + 12px) 20px 90px}
+.intro__logo{position:fixed;left:50%;top:50%;width:clamp(150px,23vw,230px);height:auto;transform:translate(-50%,-50%);z-index:70;pointer-events:none;will-change:transform,opacity}
+.intro__lema{font-family:var(--ff);font-weight:700;font-size:clamp(1.12rem,2.8vw,1.6rem);line-height:1.4;text-align:center;color:var(--tinta);max-width:24ch;opacity:0;transform:translateY(16px)}
+.intro__piso{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--tinta-3);display:flex;flex-direction:column;align-items:center;gap:9px}
+.intro__piso i{width:2px;height:34px;background:linear-gradient(var(--tinta),transparent);animation:intro-baja 1.6s ease-in-out infinite;transform-origin:top}
+@keyframes intro-baja{0%,100%{transform:scaleY(.35);opacity:.35}50%{transform:scaleY(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.intro__logo{position:static;transform:none}.intro__lema{opacity:1;transform:none}.intro__piso i{animation:none}}

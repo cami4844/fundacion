@@ -1,0 +1,364 @@
+/* ————— 0. Tipografías oficiales (locales, sin terceros) —————
+   OJO: estaban precargadas en el HTML pero sin @font-face: el navegador
+   las bajaba y nunca las usaba. Sin esto todo se veía en la fuente del
+   sistema y la marca no se sentía. */
+@font-face{font-family:"Sora";src:url("../assets/fonts/sora-400-normal.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Sora";src:url("../assets/fonts/sora-600-normal.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Sora";src:url("../assets/fonts/sora-700-normal.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("../assets/fonts/jetbrainsmono-400-normal.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+
+/* ============================================================
+   BASE V15 «Taller de ciencia» — sistema compartido por todas
+   las páginas. Aquí vive lo común: tokens, reset, cabecera,
+   menú, botones, chips, pie, avisos y utilidades de reveal.
+   El diseño por página está en inicio.css y paginas.css.
+   Paleta: hueso #FAF8F2 · tinta #111417 · verde #0E6F7A
+           rojo #C0402A · sol #F0B429 (el amarillo es nuevo)
+   ============================================================ */
+
+/* ————— 1. Tokens ————— */
+:root{
+  --hueso:#FAF8F2;
+  --blanco:#FFFFFF;
+  --tinta:#111417;
+  --tinta-2:#3C4247;
+  --tinta-3:#71787E;
+  --linea:#D9D5C9;
+  --verde:#0E6F7A;
+  --verde-vivo:#1FA7A9;
+  --verde-suave:#DDEEEA;
+  --rojo:#C0402A;
+  --rojo-suave:#F7E1D8;
+  --sol:#F0B429;
+  --sol-suave:#FBEFC9;
+  --noche:#15181B;
+  --noche-2:#1D2125;
+  --ff:"Sora",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ff-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",monospace;
+  --borde:2px solid var(--tinta);
+  --sombra:5px 6px 0 var(--tinta);
+  --sombra-1:3px 4px 0 var(--tinta);
+  --sombra-2:8px 9px 0 var(--tinta);
+  --radio:18px;
+  --h-cabecera:76px;
+  --ancho:1180px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+/* ————— 2. Reset corto ————— */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:hidden;overflow-x:clip}
+html.sin-scroll{overflow:hidden}
+body{
+  margin:0;background:var(--hueso);color:var(--tinta);
+  font-family:var(--ff);font-size:16px;line-height:1.6;
+  overflow-x:hidden;min-height:100vh;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+h1,h2,h3,h4{line-height:1.12;letter-spacing:-.02em;font-weight:700;margin:0}
+p{margin:0}
+::selection{background:var(--sol);color:var(--tinta)}
+:focus-visible{outline:3px solid var(--verde);outline-offset:3px;border-radius:4px}
+
+/* papel cuadriculado de taller, fijo y barato */
+.rejilla{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(17,20,23,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,20,23,.05) 1px,transparent 1px);
+  background-size:44px 44px}
+main{position:relative;z-index:1}
+footer{position:relative;z-index:1}
+
+.skip{position:fixed;left:14px;top:-60px;z-index:200;background:var(--tinta);color:#fff;
+  padding:.6em 1.1em;border-radius:10px;font-weight:600;transition:top .2s}
+.skip:focus{top:12px}
+
+.contenedor{width:min(var(--ancho),100% - 40px);margin-inline:auto}
+
+/* ————— 3. Cabecera ————— */
+.cabecera{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--h-cabecera);
+  background:var(--hueso);border-bottom:var(--borde);transition:transform .3s var(--ease)}
+.cabecera__in{height:100%;display:flex;align-items:center;gap:20px}
+.lockup{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:0}
+/* el isotipo es VERTICAL (viewBox 271x400): con alto fijo quedaba aplastado.
+   Con height:auto recupera su proporción real, igual que en el intro. */
+.lockup__iso{width:42px;height:auto;flex:none}
+.lockup__txt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.lockup__txt b{font-size:.92rem;letter-spacing:-.01em;white-space:nowrap}
+.lockup__txt small{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--verde)}
+.nav{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:600;
+  font-size:.86rem;padding:.5em .8em;border-radius:12px;border:2px solid transparent;
+  transition:border-color .2s,background .2s,transform .2s}
+.nav a i{font-style:normal;font-family:var(--ff-mono);font-size:.6rem;color:var(--tinta-3)}
+.nav a:hover{background:var(--blanco);border-color:var(--tinta);transform:translateY(-1px)}
+.nav a.activo{background:var(--sol);border-color:var(--tinta);box-shadow:var(--sombra-1)}
+.nav .nav-cta{background:var(--verde);color:#fff;border-color:var(--tinta);box-shadow:var(--sombra-1);
+  margin-left:10px}
+.nav .nav-cta:hover{background:#0B5E68}
+.nav .nav-cta i{color:rgba(255,255,255,.7)}
+.menu-btn{display:none;margin-left:auto;width:46px;height:46px;border:var(--borde);
+  border-radius:13px;background:var(--blanco);cursor:pointer;align-items:center;justify-content:center;
+  box-shadow:var(--sombra-1)}
+.menu-btn:active{transform:translate(2px,2px);box-shadow:none}
+
+/* ————— 4. Menú móvil (drawer con gesto limitado) ————— */
+.menu-velo{position:fixed;inset:0;z-index:80;background:rgba(17,20,23,.45);
+  opacity:0;pointer-events:none;transition:opacity .3s}
+.menu-velo.abierto{opacity:1;pointer-events:auto}
+.menu-movil{position:fixed;z-index:90;top:0;right:0;bottom:0;width:min(86vw,360px);
+  background:var(--hueso);border-left:var(--borde);
+  transform:translate3d(105%,0,0);transition:transform .38s var(--ease);
+  display:flex;flex-direction:column;padding:18px 22px calc(18px + env(safe-area-inset-bottom))}
+.menu-movil.abierto{transform:translate3d(0,0,0)}
+.menu-movil.sin-transicion{transition:none}
+.menu-movil__asa{display:flex;justify-content:center;padding:4px 0 14px;touch-action:none}
+.menu-movil__asa i{width:52px;height:6px;border-radius:4px;background:var(--tinta);opacity:.25}
+.menu-enlace{display:flex;align-items:center;gap:14px;text-decoration:none;
+  padding:15px 6px;border-bottom:1.5px solid var(--linea);font-size:1.06rem}
+.menu-enlace i{font-style:normal;font-family:var(--ff-mono);font-size:.66rem;color:var(--tinta-3)}
+.menu-enlace b{font-weight:600}
+.menu-flecha{margin-left:auto;color:var(--verde)}
+.menu-cta{margin-top:18px;justify-content:center;display:flex;align-items:center;gap:9px}
+.menu-movil__pie{margin-top:auto;padding-top:18px;font-family:var(--ff-mono);font-size:.64rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3);line-height:1.8}
+.menu-movil__pie span{color:var(--verde)}
+
+/* ————— 5. Botones, chips y rótulos ————— */
+.btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;cursor:pointer;
+  font-weight:600;font-size:.94rem;padding:.78em 1.35em;border-radius:14px;
+  background:var(--blanco);border:var(--borde);box-shadow:var(--sombra-1);
+  transition:transform .15s var(--ease),box-shadow .15s var(--ease),background .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sombra)}
+.btn:active{transform:translate(3px,3px);box-shadow:none}
+.btn--primario{background:var(--verde);color:#fff}
+.btn--primario:hover{background:#0B5E68}
+.btn--sol{background:var(--sol);color:var(--tinta)}
+.btn--linea{background:transparent}
+.btn--mini{font-size:.82rem;padding:.6em 1em;border-radius:11px}
+.btn--oro{background:var(--sol);color:var(--tinta)}
+
+.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  background:var(--blanco);border:2px solid var(--tinta);border-radius:999px;
+  padding:.42em 1em;box-shadow:var(--sombra-1)}
+.rotulo{display:inline-flex;align-items:center;gap:10px;font-family:var(--ff-mono);
+  font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--tinta-2)}
+.rotulo i{width:12px;height:12px;background:var(--rojo);border:2px solid var(--tinta);
+  border-radius:4px;transform:rotate(45deg)}
+/* el resaltado YA NO fuerza nowrap: en 320px una frase destacada no
+   cabía en la línea y empujaba el título fuera de la caja */
+.marca-agua{color:var(--verde);position:relative;
+  background:linear-gradient(180deg,transparent 62%,var(--sol) 62%,var(--sol) 94%,transparent 94%);
+  padding-inline:.08em}
+
+/* sello circular tipo sticker */
+.sello-sticker{display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  width:104px;height:104px;border-radius:50%;background:var(--sol);border:2.5px solid var(--tinta);
+  font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  line-height:1.5;transform:rotate(8deg);box-shadow:var(--sombra-1);padding:10px}
+
+/* cinta adhesiva (washi) */
+.washi{position:absolute;width:96px;height:26px;background:var(--sol-suave);opacity:.92;
+  border-inline:1.5px dashed rgba(17,20,23,.25);box-shadow:0 1px 0 rgba(17,20,23,.08);z-index:2}
+
+/* ————— 6. Utilidades de aparición (main.js añade .in) ————— */
+.rv,.rv--izq,.rv--der,.rv--escala,.rv--clip{opacity:0;transform:translateY(26px);
+  transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--d,0s)}
+.rv--izq{transform:translateX(-34px)}
+.rv--der{transform:translateX(34px)}
+.rv--escala{transform:scale(.94)}
+.rv--clip{clip-path:inset(0 0 100% 0);transform:none;transition:clip-path .9s var(--ease)}
+.rv.in,.rv--izq.in,.rv--der.in,.rv--escala.in{opacity:1;transform:none}
+.rv--clip.in{clip-path:inset(0 0 0% 0)}
+.tipeo .tipeo__p{opacity:0;transform:translateY(9px);display:inline-block;
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.tipeo.tipeo--in .tipeo__p{opacity:1;transform:none}
+
+/* barra de progreso de lectura */
+.progreso{position:fixed;top:0;left:0;right:0;height:5px;z-index:70;pointer-events:none}
+.progreso i{display:block;height:100%;background:var(--rojo);transform:scaleX(0);
+  transform-origin:left;border-inline-end:2px solid var(--tinta)}
+
+/* indicador de desplazamiento */
+.indicador-scroll{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;z-index:3;pointer-events:none;
+  font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--tinta-2);transition:opacity .4s,transform .4s}
+.indicador-scroll i{width:2px;height:24px;background:var(--tinta);animation:cae 2s var(--ease) infinite}
+@keyframes cae{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}
+  55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.indicador-scroll.oculto{opacity:0;transform:translate(-50%,8px)}
+
+/* botón flotante WhatsApp (móvil) */
+.wa-flotante{position:fixed;right:16px;bottom:16px;z-index:65;display:flex;align-items:center;gap:8px;
+  background:var(--verde);color:#fff;text-decoration:none;font-weight:600;font-size:.86rem;
+  padding:.8em 1.2em;border:2px solid var(--tinta);border-radius:999px;box-shadow:var(--sombra-1);
+  opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s}
+.wa-flotante.visible{opacity:1;transform:none}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,80px);z-index:120;
+  display:flex;align-items:center;gap:8px;background:var(--tinta);color:#fff;font-size:.88rem;
+  padding:.8em 1.3em;border-radius:14px;border:2px solid #000;opacity:0;transition:.35s var(--ease);max-width:88vw}
+.toast.visible{opacity:1;transform:translate(-50%,0)}
+
+/* tooltip del mapa */
+.tooltip-mapa{position:fixed;z-index:110;pointer-events:none;background:var(--blanco);
+  border:2px solid var(--tinta);border-radius:12px;box-shadow:var(--sombra-1);padding:.55em .9em;
+  font-size:.78rem;line-height:1.45;opacity:0;transition:opacity .15s}
+.tooltip-mapa.visible{opacity:1}
+.tooltip-mapa i{font-style:normal;font-family:var(--ff-mono);font-size:.58rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--verde);display:block}
+.tooltip-mapa small{color:var(--tinta-2)}
+
+/* ————— 7. Cookies ————— */
+.cookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:100;display:flex;justify-content:center;
+  animation:cookies-entra .6s var(--ease) .8s both}
+@keyframes cookies-entra{from{transform:translateY(120%)}to{transform:none}}
+.cookies__tarjeta{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;
+  background:var(--blanco);border:var(--borde);border-radius:var(--radio);box-shadow:var(--sombra);
+  padding:16px 20px;max-width:760px}
+.cookies__icono{width:46px;height:46px;border-radius:12px;background:var(--sol-suave);
+  border:2px solid var(--tinta);display:grid;place-items:center;color:var(--tinta)}
+.cookies__txt b{display:block;font-size:.94rem}
+.cookies__txt p{font-size:.8rem;color:var(--tinta-2);margin-top:2px}
+.cookies__acciones{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.cookies__config{background:none;border:0;cursor:pointer;font-family:var(--ff-mono);font-size:.64rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-2);text-decoration:underline}
+.cookies--sin-anim{animation:none}
+.cookies-panel{position:fixed;inset:0;z-index:130;display:none;place-items:center;
+  background:rgba(17,20,23,.5);padding:20px}
+.cookies-panel.abierto{display:grid}
+.cookies-panel__caja{background:var(--blanco);border:var(--borde);border-radius:var(--radio);
+  box-shadow:var(--sombra-2);padding:26px;max-width:520px;width:100%}
+.cookies-panel__caja h3{margin-bottom:14px}
+.cookie-op{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  padding:13px 0;border-top:1.5px dashed var(--linea)}
+.cookie-op b{font-size:.9rem}
+.cookie-op p{font-size:.78rem;color:var(--tinta-2);margin-top:2px}
+.interruptor{position:relative;width:52px;height:29px;border-radius:999px;flex:none;cursor:pointer;
+  background:var(--hueso);border:2px solid var(--tinta);transition:background .2s}
+.interruptor i{position:absolute;top:2.5px;left:3px;width:19px;height:19px;border-radius:50%;
+  background:var(--tinta);transition:transform .2s var(--ease)}
+.interruptor.activo{background:var(--verde-vivo)}
+.interruptor.activo i{transform:translateX(23px);background:#fff}
+.cookies-panel__pie{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.cookies-panel__nota{font-size:.72rem;color:var(--tinta-3);margin-top:12px}
+
+/* ————— 8. Brújula de páginas (la hace js/main.js) —————
+   El sitio tiene 6 páginas sueltas. Sin este bloque al final, quien
+   llega desde el menú no se da cuenta de que puede seguir. En celular
+   el botón "Siguiente" crece y ocupa casi todo el ancho. */
+.brujula{background:var(--sol-suave);border-top:var(--borde);border-bottom:var(--borde);
+  padding:34px 0 38px}
+.brujula .contenedor{display:flex;flex-direction:column;gap:22px}
+.brujula__titulo{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--tinta-2)}
+.brujula__titulo b{font-size:.8rem;letter-spacing:.14em;color:var(--tinta);
+  background:var(--blanco);border:2px solid var(--tinta);border-radius:999px;padding:.35em .95em}
+.brujula__pasos{display:flex;flex-wrap:wrap;gap:9px}
+.brujula__paso{display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+  background:var(--blanco);border:2px solid var(--tinta);border-radius:999px;
+  padding:.42em .95em .42em .45em;font-size:.82rem;color:var(--tinta);
+  box-shadow:2px 3px 0 rgba(17,20,23,.16);transition:transform .18s var(--ease),box-shadow .18s,background .18s}
+.brujula__paso i{width:26px;height:26px;flex:none;border-radius:50%;background:var(--hueso);
+  border:1.5px solid var(--tinta);display:grid;place-items:center;
+  font-family:var(--ff-mono);font-size:.64rem;font-style:normal}
+.brujula__paso b{font-weight:600}
+.brujula__paso:hover{transform:translate(-1px,-2px);box-shadow:3px 5px 0 rgba(17,20,23,.2)}
+.brujula__paso.es-actual{background:var(--verde);color:#fff;box-shadow:none}
+.brujula__paso.es-actual i{background:var(--sol);border-color:var(--tinta)}
+.brujula__flechas{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;justify-content:center}
+.brujula__hueco{flex:1 1 0;min-width:0}
+.brujula__btn{flex:0 1 300px;display:flex;align-items:center;gap:12px;text-decoration:none;
+  background:var(--tinta);color:#EDEBE3;border:2px solid var(--tinta);border-radius:var(--radio);
+  box-shadow:4px 5px 0 rgba(17,20,23,.22);padding:11px 16px;min-height:56px;
+  transition:transform .18s var(--ease),box-shadow .18s,background .18s}
+.brujula__btn:hover{transform:translate(-2px,-3px);box-shadow:6px 8px 0 rgba(17,20,23,.25)}
+.brujula__btn svg{flex:none}
+.brujula__btn span{display:flex;flex-direction:column;line-height:1.3}
+.brujula__btn small{font-family:var(--ff-mono);font-size:.54rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--verde-vivo)}
+.brujula__btn b{font-size:.92rem;color:#fff}
+.brujula__btn--siguiente{background:var(--verde);justify-content:flex-end;text-align:right}
+.brujula__btn--siguiente small{color:var(--sol)}
+.brujula__btn--siguiente:hover{background:var(--verde-vivo)}
+@media (max-width:720px){
+  /* aquí es donde más hace falta: el siguiente tiene que verse de un vistazo,
+     pero sin tragarse la pantalla: compacto y centrado */
+  .brujula{padding:24px 0 28px}
+  .brujula .contenedor{gap:16px}
+  .brujula__pasos{gap:7px;justify-content:center}
+  .brujula__paso{padding:.36em .75em .36em .38em;font-size:.74rem}
+  .brujula__paso i{width:22px;height:22px;font-size:.56rem}
+  .brujula__flechas{flex-direction:column;align-items:center}
+  .brujula__btn{flex:1 1 auto;align-self:stretch;min-height:52px;padding:10px 14px;gap:10px}
+  .brujula__btn--atras{order:2}
+  .brujula__btn--siguiente{order:1;box-shadow:4px 5px 0 rgba(17,20,23,.28)}
+  .brujula__btn b{font-size:.95rem}
+}
+
+/* ————— 9. Pie de página ————— */
+.pie{background:var(--noche);color:#EDEBE3;border-top:var(--borde);margin-top:0}
+.pie__grid{display:grid;grid-template-columns:1.3fr .8fr .9fr 1fr;gap:34px;padding:56px 0 40px}
+.pie__marca img{filter:brightness(0) invert(1);opacity:.95}
+.pie__lema{margin:14px 0 16px;font-size:1.02rem;font-weight:600;line-height:1.5}
+.pie__sello{display:inline-block;font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--tinta);background:var(--sol);border:2px solid var(--tinta);
+  border-radius:8px;padding:.5em .9em;transform:rotate(-2.5deg)}
+.pie h4{font-family:var(--ff-mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--verde-vivo);margin-bottom:14px;font-weight:400}
+.pie ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.pie a{color:#EDEBE3;text-decoration:none;border-bottom:1.5px solid transparent;transition:border-color .2s}
+.pie a:hover{border-color:var(--sol)}
+.pie__social{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.social{display:inline-flex;align-items:center;gap:10px;border:2px solid rgba(237,235,227,.4);
+  border-radius:999px;padding:.5em 1.1em;text-decoration:none;transition:border-color .2s}
+.social:hover{border-color:var(--sol)}
+.social small{font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+  display:flex;flex-direction:column;line-height:1.5}
+.social small b{font-size:.66rem;letter-spacing:.1em;display:flex;align-items:center;gap:6px}
+.social .punto{width:7px;height:7px;border-radius:50%;background:var(--verde-vivo);
+  animation:parpadeo-punto 1.8s infinite}
+@keyframes parpadeo-punto{50%{opacity:.35}}
+.social--pronto{opacity:.55}
+.pie__base{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center;
+  border-top:1.5px solid rgba(237,235,227,.18);padding:20px 0 26px;
+  font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.1em;color:#A9A79E}
+.pie__base a{color:#EDEBE3}
+.pie__hecho{color:var(--sol)}
+
+/* ————— 9. Responsive base ————— */
+@media (max-width:1080px){
+  .nav a i{display:none}
+  .nav a{padding:.5em .65em;font-size:.82rem}
+}
+@media (max-width:980px){
+  :root{--h-cabecera:68px}
+  .lockup__iso{width:36px}
+  .nav{display:none}
+  .menu-btn{display:flex}
+  .pie__grid{grid-template-columns:1fr 1fr;gap:30px}
+  .indicador-scroll{display:none}
+  .cookies__tarjeta{grid-template-columns:1fr;text-align:left}
+  .cookies__acciones{flex-direction:row;flex-wrap:wrap}
+}
+@media (max-width:720px){
+  .pie__grid{grid-template-columns:1fr}
+  .pie__base{flex-direction:column;align-items:flex-start}
+}
+
+/* ————— 10. Movimiento reducido ————— */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important}
+  .rv,.rv--izq,.rv--der,.rv--escala{opacity:1;transform:none}
+  .rv--clip{clip-path:none;opacity:1}
+  .tipeo .tipeo__p{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}

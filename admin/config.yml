@@ -1,0 +1,44 @@
+# ============================================================
+# CMS de la Fundación Red Con Ciencia — publica noticias
+# directamente en GitHub desde la web, con tu cuenta de GitHub.
+#
+# Los DOS valores que dicen PEGA_AQUI se rellenan UNA sola vez
+# siguiendo los pasos que muestra la propia página admin/cms.html.
+# El Client ID es público (no es una clave secreta).
+# ============================================================
+
+backend:
+  name: github
+  repo: cami4844/fundacion
+  branch: main
+  app_id: PEGA_AQUI_TU_CLIENT_ID
+  base_url: PEGA_AQUI_TU_URL_DE_WORKERS
+
+site_url: https://cami4844.github.io/fundacion/
+display_url: https://cami4844.github.io/fundacion
+locale: es
+
+media_folder: "assets/img/fotos"
+public_folder: "/fundacion/assets/img/fotos"
+
+collections:
+  - name: "noticias"
+    label: "Noticias y eventos"
+    files:
+      - name: "noticias"
+        label: "Noticias de la página"
+        file: "data-publica/noticias.json"
+        format: "json"
+        editor: { preview: false }
+        fields:
+          - label: "Noticias"
+            name: "noticias"
+            widget: "list"
+            summary: "{{fields.fecha}} · {{fields.titulo}}"
+            add_to_top: true
+            fields:
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Fecha", name: "fecha", widget: "date", format: "YYYY-MM-DD" }
+              - { label: "Etiqueta corta (opcional)", name: "etiqueta", widget: "string", required: false, default: "" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Imagen (opcional)", name: "imagen", widget: "image", required: false, default: "" }

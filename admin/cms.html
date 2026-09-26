@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Publicar noticias — Fundación Red Con Ciencia</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+  :root { --papel:#FAF8F2; --tinta:#15181C; --teal:#0E6F7A; --ambar:#B9801F; --rojo:#C0402A; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background:var(--papel); color:var(--tinta);
+         font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+         display:flex; align-items:flex-start; justify-content:center; padding:6vh 16px; }
+  .caja { max-width:640px; width:100%; background:#fff; border:2px solid var(--tinta);
+          border-radius:18px; box-shadow:6px 6px 0 rgba(21,24,28,.85); padding:28px 26px; }
+  .caja img { height:52px; display:block; margin:0 auto 10px; }
+  h1 { font-size:1.35rem; margin:.2em 0 .1em; text-align:center; }
+  .sub { color:#5c6168; text-align:center; margin:0 0 18px; font-size:.95rem; }
+  ol { padding-left:1.2em; line-height:1.55; }
+  ol li { margin-bottom:12px; font-size:.95rem; }
+  code { background:var(--papel); border:1px solid #ddd6c4; border-radius:6px;
+         padding:1px 6px; font-size:.86em; overflow-wrap:anywhere; }
+  a { color:var(--teal); font-weight:600; }
+  .nota { background:#FBF3D9; border:1.5px solid #e3cf8f; border-radius:10px;
+          padding:10px 14px; font-size:.88rem; margin-top:16px; }
+  .fallo { background:#F9E4DE; border-color:#e0a99a; }
+  #espera { text-align:center; color:#5c6168; padding:40px 0; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<div class="caja">
+  <img src="../assets/marca/isotipo-fundacion.svg" alt="Isotipo de la Fundación Red Con Ciencia">
+  <h1>Publicar noticias desde la web</h1>
+  <p class="sub">Con tu cuenta de GitHub, sin servidor y sin costo. Lo que publiques aquí
+     se guarda en tu repositorio y la página se actualiza sola en un minuto.</p>
+
+  <div id="espera">Revisando la configuración…</div>
+
+  <!-- Se muestra mientras admin/config.yml tenga los valores PEGA_AQUI -->
+  <div id="instrucciones" hidden>
+    <ol>
+      <li><b>Activa el puente gratuito (2 minutos):</b> entra a
+        <a href="https://github.com/sveltia/sveltia-cms-auth" target="_blank" rel="noopener">github.com/sveltia/sveltia-cms-auth</a>
+        y oprime el botón <b>Deploy to Cloudflare</b>. Crea la cuenta gratuita si te la pide.
+        Al terminar te da una URL parecida a <code>https://algo.workers.dev</code> — esa es tu
+        <code>base_url</code>; en la misma pantalla te muestra la <b>URL de callback</b> exacta para el paso 2.</li>
+      <li><b>Registra la aplicación en GitHub:</b> entra a
+        <a href="https://github.com/settings/developers" target="_blank" rel="noopener">github.com/settings/developers</a>
+        → <b>New OAuth App</b> → Nombre: <code>CMS Fundación Red Con Ciencia</code> ·
+        Homepage: <code>https://cami4844.github.io/fundacion/</code> ·
+        Callback: la del paso anterior. Regístrala y <b>copia el Client ID</b>.</li>
+      <li><b>Pega los dos valores en la configuración:</b> en tu repositorio abre
+        <a href="https://github.com/cami4844/fundacion/edit/main/admin/config.yml" target="_blank" rel="noopener">admin/config.yml</a>
+        (botón lápiz), reemplaza <code>PEGA_AQUI_TU_CLIENT_ID</code> y
+        <code>PEGA_AQUI_TU_URL_DE_WORKERS</code> por tus valores y oprime <b>Commit changes</b>.</li>
+      <li><b>Vuelve a esta página y recárgala.</b> Vas a entrar con tu cuenta de GitHub y
+        a publicar con el botón <b>Publicar</b>. La noticia aparece en la página en un minuto.</li>
+    </ol>
+    <div class="nota">Este editor publica <b>noticias y eventos</b> en la web pública con tu
+      cuenta de GitHub (más segura que cualquier clave escrita). La bandeja de mensajes y el
+      aviso por correo siguen viviendo en el panel de tu PC, y en el futuro en el hosting de
+      la Fundación (Hostinger).</div>
+  </div>
+
+  <!-- Se muestra solo si el editor no pudo cargar (sin internet o CDN caído) -->
+  <div id="fallo" hidden>
+    <div class="nota fallo">El editor no pudo cargar en este momento. Revisa tu conexión y
+      recarga; mientras tanto puedes publicar editando
+      <a href="https://github.com/cami4844/fundacion/edit/main/data-publica/noticias.json" target="_blank" rel="noopener">data-publica/noticias.json</a>
+      directo en GitHub.</div>
+  </div>
+</div>
+
+<script src="cms.js" defer></script>
+</body>
+</html>
